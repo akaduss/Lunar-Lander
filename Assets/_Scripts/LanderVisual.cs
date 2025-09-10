@@ -5,6 +5,7 @@ public class LanderVisual : MonoBehaviour
     [SerializeField] private ParticleSystem leftThrusterParticle;
     [SerializeField] private ParticleSystem midThrusterParticle;
     [SerializeField] private ParticleSystem rightThrusterParticle;
+    [SerializeField] private GameObject explosionVFX;
 
     private Lander lander;
 
@@ -16,6 +17,16 @@ public class LanderVisual : MonoBehaviour
         lander.OnLeftKeyPressed += Lander_OnLeftKeyPressed;
         lander.OnUpKeyPressed += Lander_OnUpKeyPressed;
         lander.OnBeforeForce += Lander_OnBeforeForce;
+        lander.OnLanded += Lander_OnLanded;
+    }
+
+    private void Lander_OnLanded(object sender, Lander.OnLandedEventArgs e)
+    {
+        if(e.landingType != Lander.LandingType.Success)
+        {
+            Instantiate(explosionVFX, transform.position, Quaternion.identity);
+            gameObject.SetActive(false);
+        }
     }
 
     private void Lander_OnBeforeForce(object sender, System.EventArgs e)
